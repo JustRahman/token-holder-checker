@@ -1,0 +1,49 @@
+{
+  "name": "token-holder-monitor",
+  "version": "0.1.0",
+  "description": "Monitor token holders, whale tracking, and centralization alerts",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "start:prod": "NODE_ENV=production node dist/index.js",
+    "test": "node --test",
+    "test:example": "tsx test-example.ts",
+    "test:simple": "tsx test-simple.ts",
+    "test:real": "npm run build && tsx test-real-data.ts",
+    "test:weth": "npm run build && npx tsx test-weth.ts",
+    "test:custom": "npm run build && npx tsx test-custom-tokens.ts",
+    "test:bsc": "npm run build && npx tsx test-bsc-tokens.ts",
+    "deploy:build": "npm ci && npm run build",
+    "deploy:pm2": "pm2 start ecosystem.config.cjs",
+    "deploy:docker": "docker-compose up -d --build",
+    "logs:pm2": "pm2 logs token-holder-monitor",
+    "logs:docker": "docker-compose logs -f",
+    "stop:pm2": "pm2 stop token-holder-monitor",
+    "stop:docker": "docker-compose down"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.19.6",
+    "@lucid-dreams/agent-kit": "latest",
+    "axios": "^1.7.9",
+    "bignumber.js": "^9.1.2",
+    "dotenv": "^16.4.7",
+    "ethers": "^6.13.4",
+    "node-cache": "^5.1.2",
+    "p-queue": "^8.0.1",
+    "p-retry": "^6.2.1",
+    "ws": "^8.18.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/ws": "^8.5.13",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
