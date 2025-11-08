@@ -32,10 +32,13 @@ export const config = {
   // Rate Limiting
   apiRateLimit: parseInt(process.env.API_RATE_LIMIT || "5", 10),
 
-  // x402 Configuration
-  x402: {
-    enabled: process.env.X402_ENABLED === "true",
-    paymentAddress: process.env.X402_PAYMENT_ADDRESS || "",
+  // Payment Configuration
+  payments: {
+    enabled: process.env.ENABLE_PAYMENTS === "true",
+    facilitatorUrl: process.env.FACILITATOR_URL || "https://facilitator.daydreams.systems",
+    payTo: process.env.PAY_TO_WALLET || "",
+    network: process.env.PAYMENT_NETWORK || "base",
+    amount: process.env.PAYMENT_AMOUNT || "0.01",
   },
 
   // Chain configurations

@@ -22,7 +22,10 @@ import {
   getMockBlockHeight,
 } from "./mock-data.js";
 
-// Create the agent app with X402 payment protection
+// Check if payments should be enabled
+const paymentsEnabled = process.env.ENABLE_PAYMENTS === 'true';
+
+// Create the agent app with optional X402 payment protection
 const { app, addEntrypoint } = createAgentApp(
   {
     name: "token-holder-monitor",
@@ -30,7 +33,7 @@ const { app, addEntrypoint } = createAgentApp(
     description:
       "Monitor token holder distributions, track whale wallets, and generate alerts for centralization risks and large holder activity across multiple blockchain networks.",
   },
-  {
+  paymentsEnabled ? {
     config: {
       payments: {
         facilitatorUrl: (process.env.FACILITATOR_URL || "https://facilitator.daydreams.systems") as `${string}://${string}`,
@@ -40,7 +43,7 @@ const { app, addEntrypoint } = createAgentApp(
       }
     },
     useConfigPayments: true  // ✅ Enables X402 payment middleware
-  }
+  } : {}
 );
 
 // Input schema validation
@@ -289,10 +292,14 @@ import { serve } from "@hono/node-server";
 const port = parseInt(process.env.PORT || "3000", 10);
 
 console.log(`🚀 Starting Token Holder Monitor on port ${port}...`);
-console.log(`💰 Payment enabled: X402 protocol`);
-console.log(`   • Price: ${process.env.PAYMENT_AMOUNT || "0.01"} USDC per call`);
-console.log(`   • Network: ${process.env.PAYMENT_NETWORK || "base"}`);
-console.log(`   • Wallet: ${process.env.PAY_TO_WALLET || "0x992920386E3D950BC260f99C81FDA12419eD4594"}`);
+if (paymentsEnabled) {
+  console.log(`💰 Payment enabled: X402 protocol`);
+  console.log(`   • Price: ${process.env.PAYMENT_AMOUNT || "0.01"} USDC per call`);
+  console.log(`   • Network: ${process.env.PAYMENT_NETWORK || "base"}`);
+  console.log(`   • Wallet: ${process.env.PAY_TO_WALLET || "0x992920386E3D950BC260f99C81FDA12419eD4594"}`);
+} else {
+  console.log(`🎁 FREE access mode (ENABLE_PAYMENTS=false)`);
+}
 console.log();
 
 serve({
